@@ -18,12 +18,14 @@ const router = app.router({
         url: z.string().url(),
       })
     )
-    .output(z.string())
+    .output(z.object({
+      md: z.string(),
+    }))
     .mutation(async ({ input }) => {
       const content = await getUrlContent(input.url);
       const cleanMD = await transformContentToCleanMd(content);
       console.log(cleanMD);
-      return cleanMD;
+      return { md: cleanMD };
     }),
   researchText: app.procedure
     .input(

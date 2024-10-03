@@ -27,7 +27,6 @@ export async function transformContentToCleanMd(content: string) {
     }]
   });
 
-  console.log(response);
 
   if (response.content[0].type !== "tool_use") {
     throw new Error("No tool use found");
