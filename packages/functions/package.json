@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-template/functions",
+  "name": "@TALMODIT/functions",
   "version": "0.0.0",
   "dependencies": {
-    "@monorepo-template/core": "*",
+    "@TALMODIT/core": "*",
     "sst": "*"
   },
   "devDependencies": {
