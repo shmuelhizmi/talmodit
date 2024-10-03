@@ -11,9 +11,10 @@ export default $config({
   async run() {
     await import("./infra/storage");
     const api = await import("./infra/api");
-
+    const next = await import("./infra/next");
     return {
       api: api.talmoditApi.url,
+      next: next.web.url,
     };
   },
 });

@@ -9,6 +9,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Bucket"
     }
+    "TalmodWeb": {
+      "type": "sst.aws.Nextjs"
+      "url": string
+    }
     "TalmoditApi": {
       "name": string
       "type": "sst.aws.Function"
