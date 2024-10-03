@@ -3,7 +3,7 @@
 export default $config({
   app(input) {
     return {
-      name: "TALMODIT",
+      name: "talmodit",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
     };

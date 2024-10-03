@@ -36,3 +36,5 @@ export const handler = awsLambdaRequestHandler({
   router: router,
   createContext: (opts) => opts,
 });
+
+export type AppRouter = typeof router;

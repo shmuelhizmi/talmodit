@@ -10,22 +10,16 @@ import { PythonInterpreterTool } from "@langchain/community/experimental/tools/p
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { Tool } from "@anthropic-ai/sdk/resources/messages.mjs";
 import { tool } from "@langchain/core/tools";
-import Perplexity, {
-  ChatCompletionsPostRequestModelEnum,
-} from "perplexity-sdk";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
-
-const perplexity = new Perplexity({
-  apiKey: process.env.PERPLEXITY_API_KEY!,
-});
+import axios from "axios";
+import { loadPyodide } from "pyodide";
 
 const perplexitySearch = tool(
   async ({ query }) => {
-    const client = await perplexity.client();
-    const response = await client.chatCompletionsPost({
-      model: ChatCompletionsPostRequestModelEnum.Pplx70bOnline,
+    const response = await axios.post("https://api.perplexity.ai/chat/completions", {
+      model: "pplx-70b-online	",
       messages: [
         {
           role: "user",
@@ -33,7 +27,7 @@ const perplexitySearch = tool(
         },
       ],
     });
-    return response.choices![0].message?.content!;
+    return response.data.choices[0].message.content;
   },
   {
     name: "perplexitySearch",
@@ -80,14 +74,18 @@ context
 ]);
 
 export async function researchText(quote: string, context: string) {
+  const pyodide = await loadPyodide();
+  const pythonInterpreter = new PythonInterpreterTool({
+    instance: pyodide,
+  });
   const agent = createToolCallingAgent({
     llm,
-    tools: [perplexitySearch, new PythonInterpreterTool({})],
+    tools: [perplexitySearch, pythonInterpreter],
     prompt,
   });
   const executor = new AgentExecutor({
     agent,
-    tools: [perplexitySearch, new PythonInterpreterTool({})],
+    tools: [perplexitySearch, pythonInterpreter],
   });
   const response = await executor.invoke({
     quote,
