@@ -26,6 +26,7 @@ export function onlyMdBlock(stream: Stream<RawMessageStreamEvent> & Message) {
         if (chunk.delta.type !== "text_delta") continue;
         total += chunk.delta.text;
         if (
+          // check if total has ```md and doesn't have ```
           total.includes("```md") &&
           !total.replace("```md", "").includes("```")
         ) {

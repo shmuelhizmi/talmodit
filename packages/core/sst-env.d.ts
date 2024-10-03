@@ -9,5 +9,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Bucket"
     }
+    "TalmoditApi": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
   }
 }

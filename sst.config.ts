@@ -13,7 +13,7 @@ export default $config({
     const api = await import("./infra/api");
 
     return {
-      api: api.myApi.url,
+      api: api.talmoditApi.url,
     };
   },
 });

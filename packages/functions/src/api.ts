@@ -4,8 +4,12 @@ import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
 import { getUrlContent } from "./crawler";
 import { transformContentToCleanMd } from "./transformer";
 import { researchText } from "./research";
+import superjson from 'superjson';
 
-const app = initTRPC.create();
+const app = initTRPC.create({
+  transformer: superjson,
+});
+
 
 const router = app.router({
   processUrl: app.procedure
@@ -14,10 +18,12 @@ const router = app.router({
         url: z.string().url(),
       })
     )
+    .output(z.string())
     .mutation(async ({ input }) => {
       const content = await getUrlContent(input.url);
-      const cleanMd = await transformContentToCleanMd(content);
-      return cleanMd;
+      const cleanMD = await transformContentToCleanMd(content);
+      console.log(cleanMD);
+      return cleanMD;
     }),
   researchText: app.procedure
     .input(
@@ -28,7 +34,7 @@ const router = app.router({
     )
     .mutation(async ({ input }) => {
       const response = await researchText(input.quote, input.context);
-      return response;
+      return JSON.stringify(response);
     }),
 });
 

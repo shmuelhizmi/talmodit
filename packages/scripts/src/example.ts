@@ -2,13 +2,14 @@ import { Resource } from "sst";
 import { Example } from "@talmodit/core/example";
 import { createTRPCProxyClient, httpLink } from "@trpc/client";
 import type { AppRouter } from "@talmodit/functions/src/api";
-console.log(`${Example.hello()} Linked to ${Resource.MyBucket.name}.`);
+import superjson from "superjson";
 
-async function main() {
+export async function main() {
   const client = createTRPCProxyClient<AppRouter>({
+    transformer: superjson,
     links: [
       httpLink({
-        url: Resource.MyApi.url,
+        url: Resource.TalmoditApi.url,
       }),
     ],
   });

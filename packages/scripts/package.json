@@ -4,7 +4,8 @@
   "dependencies": {
     "@talmodit/core": "*",
     "@trpc/client": "^10.45.2",
-    "sst": "*"
+    "sst": "*",
+    "superjson": "^2.2.1"
   },
   "scripts": {
     "shell": "sst shell tsx"

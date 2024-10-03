@@ -1,3 +1,4 @@
+
 import { anthropic } from "./anthropic";
 
 
@@ -5,35 +6,34 @@ export async function transformContentToCleanMd(content: string) {
   const response = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20240620",
     messages: [{ role: "user", content }],
-    stream: true,
     system:
-      "Your goal is to extract the main content from possibly polluted markdown and output it to a code block with md type\n" +
-      "for example, ```md\n" +
-      "## Article Title\n" +
-      "This is a test.\n" +
-      "```\n" +
+      "Your goal is to extract the main content from possibly polluted markdown and output it as MD to the \"finish\" tool\n" +
       "Do not output anything else.",
     max_tokens: 4096,
+    tool_choice: { type: "tool", name: "finish" },
+    tools: [{
+      name: "finish",
+      input_schema: {
+        type: "object",
+        properties: {
+          md: {
+            type: "string",
+            description: "The markdown content",
+          },
+        },
+        required: ["md"],
+      },
+      description: "Finish the job",
+    }]
   });
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      let text = "";
-      for await (const chunk of response) {
-        if (chunk.type !== "content_block_delta") continue;
-        if (chunk.delta.type !== "text_delta") continue;
+  console.log(response);
 
-        text += chunk.delta.text;
-        if (
-          text.includes("```md") &&
-          !text.replace("```md", "").includes("```")
-        ) {
-          controller.enqueue(text);
-        }
-      }
-      controller.close();
-    },
-  });
+  if (response.content[0].type !== "tool_use") {
+    throw new Error("No tool use found");
+  }
 
-  return stream;
+  const message = (response.content[0].input as any).md;
+
+  return message;
 }

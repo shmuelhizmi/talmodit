@@ -38,11 +38,6 @@ const perplexitySearch = tool(
   }
 );
 
-const llm = langchainAnthropic.bindTools([
-  perplexitySearch,
-  PythonInterpreterTool,
-]);
-
 const prompt = ChatPromptTemplate.fromMessages([
   new SystemMessage(`
 You will be given a quote and a context, and you need to research the quote in the context and output in-depth analysis of the quoted information.
@@ -79,7 +74,7 @@ export async function researchText(quote: string, context: string) {
     instance: pyodide,
   });
   const agent = createToolCallingAgent({
-    llm,
+    llm: langchainAnthropic,
     tools: [perplexitySearch, pythonInterpreter],
     prompt,
   });
