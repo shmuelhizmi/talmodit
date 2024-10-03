@@ -3,7 +3,18 @@
   "version": "0.0.0",
   "dependencies": {
     "@TALMODIT/core": "*",
-    "sst": "*"
+    "@anthropic-ai/sdk": "^0.27.3",
+    "@langchain/anthropic": "^0.3.3",
+    "@langchain/community": "^0.3.4",
+    "@langchain/core": "^0.3.6",
+    "@mendable/firecrawl-js": "^1.5.2",
+    "@trpc/server": "^10.45.2",
+    "ai": "^3.4.8",
+    "axios": "^1.7.7",
+    "perplexity-sdk": "^1.0.4",
+    "sst": "*",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137"
